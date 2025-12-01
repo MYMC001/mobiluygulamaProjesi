@@ -1,34 +1,55 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-         headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{ 
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
+        headerShown: false,
+        tabBarActiveTintColor: '#10B981',
+        tabBarInactiveTintColor: '#2c3935ff',
+
+        
+
+        tabBarStyle:{
+
+          backgroundColor:"white",
+          borderTopColor:"#10B981",
+          borderTopWidth:2
+           
+        },
+
+      
+        tabBarLabelStyle:{
+          fontSize:10,
+          fontWeight:"bold",
+          fontFamily:"Roboto"
+        }
+      }}
+
+      
+    >
+         <Tabs.Screen
+        name="Timer"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Zamanlayıcı',
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="clock" size={size} color={color} solid />
+          ),
         }}
       />
+         <Tabs.Screen
+        name="Dashboard"
+        options={{
+          title: 'Dashboard',
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="tachometer-alt" size={size} color={color} solid />
+          ),
+        }}
+      />
+  
+     
     </Tabs>
   );
 }

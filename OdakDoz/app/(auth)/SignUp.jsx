@@ -1,11 +1,37 @@
-import { View, Text, Button, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, Button, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
 import { useRouter } from 'expo-router'
 import { FontAwesome5 } from '@expo/vector-icons'
+
 
 const logo_image = require('../../assets/images/logo_odak.png')
 
 const SignUp = () => {
+
+  const [username ,Setusername]=useState('')
+  const [email ,Setemail]=useState('')
+  const [password ,Setpassword]=useState('')
+
+  
+  const handleSignUp=async()=>{
+
+
+    const response=await  fetch('http://192.168.1.57:8000/SingUp',{
+
+      method:"POST",
+      headers:{
+        'Content-Type':"application/json"
+      },
+      body:JSON.stringify({username:username,email:email ,password:password})
+    })
+
+
+    if (response.ok){
+      Alert.alert("Registred")
+    }
+    else Alert.alert("Something went wrong")
+  }
+
 
   const router = useRouter();
 
@@ -19,23 +45,26 @@ const SignUp = () => {
 
        <View style={styles.form}>
 
-        <TextInput placeholder='User name' style={styles.input} />
-        <TextInput placeholder='Email' keyboardType='email-address' style={styles.input} />
+        <TextInput placeholder='User name' style={styles.input} onChangeText={Setusername} />
+        <TextInput placeholder='Email' keyboardType='email-address' style={styles.input} onChangeText={Setemail} />
 
         <TextInput
           placeholder="Password"
           secureTextEntry={true}
           style={styles.input}
+
+
+          onChangeText={Setpassword}
         />
 
-        <TextInput
+        {/* <TextInput
           placeholder="Confirm Password"
           secureTextEntry={true}
           style={styles.input}
-        />
+        /> */}
 
         <TouchableOpacity style={styles.btn}>
-          <Text style={{ textAlign: "center", padding: 7, color: "white" }}>Register</Text>
+          <Text style={{ textAlign: "center", padding: 7, color: "white" }}onPress={()=>handleSignUp()}>Register</Text>
         </TouchableOpacity>
 
       </View>
