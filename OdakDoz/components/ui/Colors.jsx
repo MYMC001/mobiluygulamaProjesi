@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableHighlight, Text } from 'react-native';
 import { themeColors } from '@/constants/theme';
 import { BlurView  } from 'expo-blur';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const Color = ({onSelectColor}) => {
  
@@ -20,8 +21,9 @@ const Color = ({onSelectColor}) => {
                     key={index}
                     style={[styles.colorBox, { backgroundColor: theme.name }]}
                     onPress={() =>{ selectthemeColor(theme.name)}}
+                  disabled={true}
                 > 
-                    <Text style={styles.colorText}></Text>
+            <FontAwesome5 name="lock" color="gray" size={29} />
                 </TouchableHighlight>
             ))}
         </BlurView>
@@ -32,7 +34,7 @@ const Color = ({onSelectColor}) => {
 const styles = StyleSheet.create({
     thememain: {
         width: '100%',
-        height:355,
+        height:300,
         flexDirection: 'row',
         flexWrap: 'wrap',
         padding:30,
@@ -40,7 +42,8 @@ const styles = StyleSheet.create({
         marginBottom:30,
      },
     colorBox: {
-        width: '25%',       
+        width: '50', 
+        height:50,      
         aspectRatio: 1,       
         justifyContent: 'center',
         alignItems: 'center',

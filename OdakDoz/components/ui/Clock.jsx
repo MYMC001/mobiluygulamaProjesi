@@ -1,51 +1,97 @@
-import React from "react";
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Platform, TouchableOpacity  ,Modal ,StatusBar} from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
+import * as Progress from 'react-native-circular-progress';
+const AnimatedCircularProgress = Progress.AnimatedCircularProgress;
 
-const Clock = () => {
+
+const Clock = ({themecolor}) => {
+
+
+  const [isRunning ,SetRuning]=useState(false)
+ 
+  const [seconds ,setSeconds ]=useState(0)
+
+
+  useEffect(()=>{
+
+    const interval=setInterval(() => {
+
+      if (!isRunning) return;
+
+       setSeconds(prev=>{
+               if(prev<0 || prev>100)  return 0;
+
+               else  return prev+1;
+       })
+      
+    }, 100);
+
+    return ()=>clearInterval(interval)
+  },[isRunning])
   return (
     <BlurView style={styles.main}>
+      <StatusBar></StatusBar>
+ 
        <View style={styles.clock}>
-        <View style={styles.label}><Text style={styles.time}>00</Text></View>
-        <Text style={styles.colon}>:</Text>
-        <View style={styles.label}><Text style={styles.time}>00</Text></View>
-        <Text style={styles.colon}>:</Text>
-        <View style={styles.label}><Text style={styles.time}>00</Text></View>
+                 <AnimatedCircularProgress
+                 
+          size={180}
+          width={15}
+          fill={seconds}                 
+          tintColor={themecolor}      
+          backgroundColor={'white'}
+        >
+          
+        </AnimatedCircularProgress>
+        <View  style={{flexDirection:"row" ,marginTop:10}}>
+                  <Text   style={styles.time}>{seconds}</Text>
+                  <Text   style={styles.time}>:</Text>
+                  <Text   style={styles.time}>{seconds}</Text>
+                  
+
+        </View>
+
       </View>
 
-       <View style={styles.btns}>
-        <TouchableOpacity style={[styles.btn, styles.playBtn]}>
-          <FontAwesome5 name="play" size={26} color="#fff" />
-        </TouchableOpacity>
+ 
+ 
+ 
 
-        <TouchableOpacity style={[styles.btn, styles.pauseBtn]}>
-          <FontAwesome5 name="pause" size={26} color="#fff" />
-        </TouchableOpacity>
+<View style={styles.btns}>
+    <TouchableOpacity
+  
+  onPress={() => SetRuning(prev => !prev)}
+>
+  <FontAwesome5
+    name={isRunning ? "pause" : "play"}
+    size={50}
+    color="#fff"
+  />
+</TouchableOpacity>
+</View>
+       
 
-        <TouchableOpacity style={[styles.btn, styles.resetBtn]}>
-          <FontAwesome5 name="redo" size={26} color="#fff" />
-        </TouchableOpacity>
-      </View>
-    </BlurView>
+  
+     </BlurView>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    width: "100%",
+    width: "88%",
     height: 250,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 20,
-    paddingVertical: 20,
-  },
+    borderRadius: 40,
+   },
 
   clock: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 30,
+  
   },
 
   label: {
@@ -80,12 +126,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "80%",
+    position:"absolute",
+    height:200,
+    top:80,
+
     gap: 20,
+    borderRadius:10, 
   },
 
   btn: {
-    padding: 15,
-    borderRadius: 50,
+     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
@@ -94,17 +144,14 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 
-  playBtn: {
-    backgroundColor: "#10B981",
-  },
+ time:{
 
-  pauseBtn: {
-    backgroundColor: "#F59E0B",
-  },
-
-  resetBtn: {
-    backgroundColor: "#EF4444",
-  },
+    fontSize:23,
+    color:"white",
+    fontWeight:"800"
+  
+ }
+ 
 });
 
 export default React.memo(Clock);

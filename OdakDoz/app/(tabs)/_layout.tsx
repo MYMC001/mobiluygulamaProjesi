@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 
+
 export default function TabLayout() {
   return (
     <Tabs
@@ -15,8 +16,7 @@ export default function TabLayout() {
         tabBarStyle:{
 
           backgroundColor:"white",
-          borderTopColor:"#10B981",
-          borderTopWidth:2
+           borderTopWidth:2
            
         },
 

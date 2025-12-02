@@ -10,9 +10,9 @@ export const themeColors = [
    { name: "indigo", value: "#4F46E5" },
   { name: "lime", value: "#84CC16" },
   { name: "cyan", value: "#06B6D4" },
-  { name: "rose", value: "#F43F5E" },
-  { name: "amber", value: "#FBBF24" },
+  { name: "brown", value: "#F43F5E" },
+  { name: "skyblue", value: "#FBBF24" },
   { name: "violet", value: "#7C3AED" },
-  { name: "emerald", value: "#047857" },
-  { name: "sky", value: "#0e8fcbff" },
+  { name: "gold", value: "#047857" },
+  { name: "skyblue", value: "#0e8fcbff" },
  ];
