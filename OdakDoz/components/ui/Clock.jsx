@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Platform, TouchableOpacity  ,Modal ,StatusBar} from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as Progress from 'react-native-circular-progress';
-import SetCatagorie from "./SetGatagorie"
+import SetTime from "./SetTime";
 const AnimatedCircularProgress = Progress.AnimatedCircularProgress;
 
 
@@ -13,6 +13,7 @@ const Clock = ({themecolor}) => {
   const [isRunning ,SetRuning]=useState(false)
  
   const [seconds ,setSeconds ]=useState(0)
+
 
 
   useEffect(()=>{
@@ -33,8 +34,8 @@ const Clock = ({themecolor}) => {
   },[isRunning])
   return (
     <BlurView style={styles.main}>
-           <SetCatagorie></SetCatagorie>
-
+<SetTime  />
+     
        <View style={styles.clock}>
                  <AnimatedCircularProgress
                  
