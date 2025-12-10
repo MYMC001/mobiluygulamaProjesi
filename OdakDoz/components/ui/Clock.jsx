@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as Progress from 'react-native-circular-progress';
 import SetTime from "./SetTime";
+import SetCategorie from "./SetGatagorie";
 const AnimatedCircularProgress = Progress.AnimatedCircularProgress;
 
 
@@ -23,9 +24,9 @@ const Clock = ({themecolor}) => {
       if (!isRunning) return;
 
        setSeconds(prev=>{
-               if(prev<0 || prev>100)  return 0;
+               if(prev==0 )  return 0;
 
-               else  return prev+1;
+               else  return prev-1;
        })
       
     }, 100);
@@ -34,7 +35,9 @@ const Clock = ({themecolor}) => {
   },[isRunning])
   return (
     <BlurView style={styles.main}>
-<SetTime  />
+      <SetCategorie />
+      
+<SetTime settime={setSeconds} />
      
        <View style={styles.clock}>
                  <AnimatedCircularProgress
