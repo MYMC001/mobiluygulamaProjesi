@@ -1,7 +1,7 @@
-import { View, Text, Button, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { Colors } from '@/constants/theme'
 import { useRouter } from 'expo-router'
-import { FontAwesome5 } from '@expo/vector-icons'
+import React from 'react'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
  
  
 const Login = () => {
@@ -30,18 +30,18 @@ const Login = () => {
        
 
         <TouchableOpacity style={styles.btn}>
-          <Text style={{ textAlign: "center", padding: 7, color: "white" }}>Login</Text>
+          <Text style={styles.btnText}>Login</Text>
         </TouchableOpacity>
 
       </View>
 
        <View style={styles.bt_info}>
-        <Text style={{ fontSize: 13 }}>
+        <Text style={styles.infoText}>
           Create Account
         </Text>
 
          <TouchableOpacity onPress={() => router.push('/SignUp')}>
-          <Text style={{ color: "#ff1616", fontWeight: "bold" }}>SignUp</Text>
+          <Text style={styles.linkText}>SignUp</Text>
         </TouchableOpacity>
       </View>
 
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
 
   btn: {
-    backgroundColor: "#FF1616",
+    backgroundColor: Colors.light.primary,
     height: 40,
     borderRadius: 20,
     justifyContent: "center"
@@ -110,5 +110,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#1C1C1C',          
     marginLeft: 5,             
+  },
+  btnText: {
+    textAlign: 'center',
+    padding: 7,
+    color: '#ffffff',
+    fontWeight: '600',
+  },
+  linkText: {
+    color: Colors.light.primary,
+    fontWeight: 'bold',
+  },
+  infoText: {
+    fontSize: 13,
   },
 });

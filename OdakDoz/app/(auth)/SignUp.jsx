@@ -1,7 +1,7 @@
-import { View, Text, Button, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import { Colors } from '@/constants/theme'
 import { useRouter } from 'expo-router'
-import { FontAwesome5 } from '@expo/vector-icons'
+import React, { useState } from 'react'
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 
 const logo_image = require('../../assets/images/logo_odak.png')
@@ -63,19 +63,19 @@ const SignUp = () => {
           style={styles.input}
         /> */}
 
-        <TouchableOpacity style={styles.btn}>
-          <Text style={{ textAlign: "center", padding: 7, color: "white" }}onPress={()=>handleSignUp()}>Register</Text>
+        <TouchableOpacity style={styles.btn} onPress={()=>handleSignUp()}>
+          <Text style={styles.btnText}>Register</Text>
         </TouchableOpacity>
 
       </View>
 
        <View style={styles.bt_info}>
-        <Text style={{ fontSize: 13 }}>
+        <Text style={styles.infoText}>
           Already have an account?  
         </Text>
 
          <TouchableOpacity onPress={() => router.push('/Login')}>
-          <Text style={{ color: "#ff1616", fontWeight: "bold" }}>Login</Text>
+          <Text style={styles.linkText}>Login</Text>
         </TouchableOpacity>
       </View>
 
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
 
   btn: {
-    backgroundColor: "#FF1616",
+    backgroundColor: Colors.light.primary,
     height: 40,
     borderRadius: 20,
     justifyContent: "center"
@@ -145,5 +145,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#1C1C1C',          
     marginLeft: 5,             
+  },
+  btnText: {
+    textAlign: 'center',
+    padding: 7,
+    color: '#ffffff',
+    fontWeight: '600',
+  },
+  linkText: {
+    color: Colors.light.primary,
+    fontWeight: 'bold',
+  },
+  infoText: {
+    fontSize: 13,
   },
 });

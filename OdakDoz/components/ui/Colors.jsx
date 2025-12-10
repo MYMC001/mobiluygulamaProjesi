@@ -21,7 +21,7 @@ const Color = ({onSelectColor}) => {
                     key={index}
                     style={[styles.colorBox, { backgroundColor: theme.name }]}
                     onPress={() =>{ selectthemeColor(theme.name)}}
-                  disabled={true}
+                  disabled={false}
                 > 
             <FontAwesome5 name="lock" color="gray" size={29} />
                 </TouchableHighlight>

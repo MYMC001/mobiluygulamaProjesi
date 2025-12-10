@@ -2,35 +2,35 @@ import React from 'react';
 import { StyleSheet, TouchableHighlight, View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-
+import { useState } from 'react';
+import Catagorie from '@/components/ui/Catagories'
 const Header = () => {
+  const [IsClose ,setClose]=useState(false)
+  
   return (
-    <BlurView intensity={100} tint="light" style={styles.header}>
+    <BlurView intensity={100}  style={styles.header}>
+      
       <View style={styles.navbar}>
-        
+                         <Catagorie  IsVisible={IsClose}  onclose={setClose}></Catagorie>
+
  
-         <TouchableHighlight
-          underlayColor="rgba(255,215,0,0.15)"
-          onPress={() => console.log("Coins pressed")}
+         <TouchableOpacity
+           onPress={() => console.log("Coins pressed")}
           style={styles.coinsWrapper}
         >
           <View style={styles.coinsContainer}>
-
             <View style={styles.coinNumberBadge}>
                 <View style={styles.sign}>
-                                    <Text  style={{color:"gold"}}>$</Text>
+                <Text  style={{color:"gold"}}>$</Text>
                 </View>
 
             <Text style={styles.coinText}>23</Text>
             </View>
           </View>
-        </TouchableHighlight>
-         <TouchableOpacity  style={styles.sidebar}  onPress={()=>console.log("the bar")}>
-                 <FontAwesome5 name="trophy" size={26}  />
+        </TouchableOpacity>
+       
 
-      </TouchableOpacity>
-
-      <TouchableOpacity  style={styles.sidebar}  onPress={()=>console.log("the bar")}>
+      <TouchableOpacity  style={styles.sidebar}  onPress={()=> {setClose(prev=>!prev);console.log("the bar")}}>
                  <FontAwesome5 name="bars" size={26}  />
 
       </TouchableOpacity>

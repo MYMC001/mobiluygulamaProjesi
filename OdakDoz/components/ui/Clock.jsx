@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Platform, TouchableOpacity  ,Modal ,StatusBar} 
 import { FontAwesome5 } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import * as Progress from 'react-native-circular-progress';
+import SetCatagorie from "./SetGatagorie"
 const AnimatedCircularProgress = Progress.AnimatedCircularProgress;
 
 
@@ -32,8 +33,8 @@ const Clock = ({themecolor}) => {
   },[isRunning])
   return (
     <BlurView style={styles.main}>
-      <StatusBar></StatusBar>
- 
+           <SetCatagorie></SetCatagorie>
+
        <View style={styles.clock}>
                  <AnimatedCircularProgress
                  
@@ -45,7 +46,8 @@ const Clock = ({themecolor}) => {
         >
           
         </AnimatedCircularProgress>
-        <View  style={{flexDirection:"row" ,marginTop:10}}>
+        
+        <View  style={styles.timerNum}>
                   <Text   style={styles.time}>{seconds}</Text>
                   <Text   style={styles.time}>:</Text>
                   <Text   style={styles.time}>{seconds}</Text>
@@ -63,9 +65,22 @@ const Clock = ({themecolor}) => {
     <TouchableOpacity
   
   onPress={() => SetRuning(prev => !prev)}
+
+  style={styles.btn}
 >
   <FontAwesome5
-    name={isRunning ? "pause" : "play"}
+    name={'play'}
+    size={50}
+    color="#fff"
+  />
+</TouchableOpacity>
+    <TouchableOpacity
+  style={styles.btn}
+  
+  onPress={() => SetRuning(prev => !prev)}
+>
+  <FontAwesome5
+    name={'pause'}
     size={50}
     color="#fff"
   />
@@ -81,77 +96,65 @@ const Clock = ({themecolor}) => {
 const styles = StyleSheet.create({
   main: {
     width: "88%",
-    height: 250,
+    height: 350,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 40,
-   },
+    padding: 20,
+    overflow: "hidden",
+  },
 
   clock: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-  
   },
 
-  label: {
-    backgroundColor: "#fff",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    minWidth: 50,
+  timerNum: {
+    width: 120,
+    height: 50,
+    position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
+    flexDirection: "row",
+    marginTop: 10,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    backgroundColor: "rgba(0,0,0,0.35)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.2)",
   },
 
   time: {
-    fontSize: 45,
-    fontFamily: Platform.OS === "ios" ? "SF Mono" : "monospace",
-    color: "#111827",
-    fontWeight: "bold",
-  },
-
-  colon: {
-    fontSize: 45,
-    fontWeight: "bold",
-    marginHorizontal: 5,
-    color: "#111827",
+    fontSize: 30,
+    color: "#fff",
+    fontWeight: "700",
+    letterSpacing: 1,
   },
 
   btns: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    width: "80%",
-    position:"absolute",
-    height:200,
-    top:80,
-
-    gap: 20,
-    borderRadius:10, 
+    justifyContent: "space-between",
+    width: "55%",
+    marginTop: 35,
   },
 
   btn: {
-     borderRadius: 10,
+    width: 65,
+    height: 65,
+    borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
+
+    backgroundColor: "rgba(0,0,0,0.4)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.15)",
+
     shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 4,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
   },
-
- time:{
-
-    fontSize:23,
-    color:"white",
-    fontWeight:"800"
-  
- }
- 
 });
+
 
 export default React.memo(Clock);
