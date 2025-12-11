@@ -9,31 +9,23 @@ const categories = [
   { name: "Sport", icon: "running" },
 ];
 
-const SetCategorie = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+const SetCategorie = ({SetVisible ,isVisible }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const handleSelect = (category) => {
     setSelectedCategory(category);
-    setModalVisible(false);
+    SetVisible(false);
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity 
-        style={styles.openButton} 
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.buttonText}>
-          {selectedCategory ? selectedCategory.name : "Select Category"}
-        </Text>
-      </TouchableOpacity>
+   
 
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        visible={isVisible}
+        onRequestClose={() => SetVisible(false)}
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
@@ -57,7 +49,7 @@ const SetCategorie = () => {
 
             <TouchableOpacity 
               style={styles.closeButton} 
-              onPress={() => setModalVisible(false)}
+              onPress={() => SetVisible(false)}
             >
               <Text style={styles.closeText}>Cancel</Text>
             </TouchableOpacity>
@@ -70,7 +62,6 @@ const SetCategorie = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  openButton: { backgroundColor: "#2196F3", padding: 12, borderRadius: 8 },
   buttonText: { color: "#fff", fontSize: 16 },
   modalBackground: {
     flex: 1,

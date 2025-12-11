@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   linkText: {
-    color: Colors.light.primary,
     fontWeight: 'bold',
   },
   infoText: {

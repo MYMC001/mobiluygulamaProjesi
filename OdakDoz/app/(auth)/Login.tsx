@@ -1,5 +1,4 @@
-import { Colors } from '@/constants/theme'
-import { useRouter } from 'expo-router'
+ import { useRouter } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
  
@@ -86,8 +85,7 @@ const styles = StyleSheet.create({
   },
 
   btn: {
-    backgroundColor: Colors.light.primary,
-    height: 40,
+     height: 40,
     borderRadius: 20,
     justifyContent: "center"
   },
@@ -118,8 +116,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   linkText: {
-    color: Colors.light.primary,
-    fontWeight: 'bold',
+     fontWeight: 'bold',
   },
   infoText: {
     fontSize: 13,

@@ -1,5 +1,4 @@
-import { Colors } from "@/constants/theme";
-import { Tabs } from "expo-router";
+ import { Tabs } from "expo-router";
 import { FontAwesome5 } from '@expo/vector-icons';
 import {Stack} from "expo-router";
 

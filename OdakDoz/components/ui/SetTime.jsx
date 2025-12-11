@@ -2,7 +2,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-const SetTime = ({settime}) => {
+const SetTime = ({settime ,SetIsVisible ,IsVisible}) => {
   const [isSetTime, SetIsSetTime] = useState(false);
   const [time, setTime] = useState(0)
 
@@ -14,13 +14,20 @@ const SetTime = ({settime}) => {
     SetIsSetTime(false);
   }
 
+
+  const HandelThecatagory=()=>{
+   
+        SetIsVisible(true)
+   
+  }
+
   return (
     <View style={styles.container}>
+        
       <Modal
         animationType="slide"
         transparent={true}
         visible={isSetTime}
-        onRequestClose={() => SetIsSetTime(false)}
       >
         <View style={styles.modalBackground}>
           <View style={styles.settime}>
@@ -57,7 +64,7 @@ const SetTime = ({settime}) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => SetIsSetTime(prev => !prev)}
+        onPress={() => HandelThecatagory()}
       >
         <FontAwesome5 name="hourglass" size={26} />
         <Text style={styles.text}>Set Time</Text>
@@ -65,6 +72,7 @@ const SetTime = ({settime}) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -79,7 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     position: "absolute",
     right: 60,
-    backgroundColor: "#2196F3",
+    backgroundColor: "gray",
   },
   text: {
     marginLeft: 8,
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "35%",
     borderRadius: 10,
-    gap: 20,
+    gap: 22,
   },
   settimeinput: {
     height: 40,
