@@ -1,4 +1,3 @@
-import { Colors } from '@/constants/theme'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
@@ -121,8 +120,7 @@ const styles = StyleSheet.create({
   },
 
   btn: {
-    backgroundColor: Colors.light.primary,
-    height: 40,
+     height: 40,
     borderRadius: 20,
     justifyContent: "center"
   },

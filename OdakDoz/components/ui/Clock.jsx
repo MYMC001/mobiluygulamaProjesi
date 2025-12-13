@@ -15,6 +15,7 @@ const Clock = ({themecolor}) => {
  
   const [seconds ,setSeconds ]=useState(0)
   const [IsVisible ,SetIsVisible]=useState(false)
+  const [isSettime ,SetIsSettime]=useState(false)
 
 
   useEffect(()=>{
@@ -35,9 +36,21 @@ const Clock = ({themecolor}) => {
   },[isRunning])
   return (
     <BlurView style={styles.main}>
-      <SetCategorie SetVisible={SetIsVisible} isVisible={IsVisible} />
+      <SetCategorie 
+      SetVisible={SetIsVisible} 
+      isVisible={IsVisible} 
+      SetIsSettime={SetIsSettime}
+      themecolor={themecolor}
       
-<SetTime settime={setSeconds} IsVisible={IsVisible} SetIsVisible={SetIsVisible} />
+      />
+      
+<SetTime 
+settime={setSeconds}
+ setitThetime={SetIsSettime} 
+ IsVisible={IsVisible}
+  SetIsVisible={SetIsVisible}  
+  themecolor={themecolor} 
+  isSetTime={isSettime}/>
      
        <View style={styles.clock}> 
                  <AnimatedCircularProgress
@@ -103,7 +116,6 @@ const styles = StyleSheet.create({
     height: 350,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 40,
     padding: 20,
     overflow: "hidden",
   },

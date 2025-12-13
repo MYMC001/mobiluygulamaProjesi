@@ -1,68 +1,88 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+} from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
 
-const categories = [
+const defaultCategories = [
   { name: "Coding", icon: "laptop-code" },
   { name: "Study", icon: "book-open" },
-  { name: "Read Book", icon: "book" },
+  { name: "Read", icon: "book" },
   { name: "Sport", icon: "running" },
 ];
 
-const SetCategorie = ({SetVisible ,isVisible }) => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+const SetCategorie = ({ SetVisible, isVisible, SetIsSettime  ,themecolor}) => {
+  const [categories, setCategories] = useState(defaultCategories);
+  const [newCategory, setNewCategory] = useState("");
 
   const handleSelect = (category) => {
-    setSelectedCategory(category);
     SetVisible(false);
+    SetIsSettime(true);
+  };
+
+  const addCategory = () => {
+    if (!newCategory.trim()) return;
+
+    setCategories((prev) => [
+      ...prev,
+      { name: newCategory, icon: "star" },
+    ]);
+
+    setNewCategory("");
   };
 
   return (
-    <View style={styles.container}>
-   
+    <Modal animationType="slide" transparent visible={isVisible}>
+      <View style={styles.modalBackground}>
+        <BlurView style={styles.modalContainer}>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isVisible}
-        onRequestClose={() => SetVisible(false)}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Select a Category</Text>
-
-            {categories.map((category, index) => (
+          <View style={styles.grid}>
+            {categories.map((item, index) => (
               <TouchableOpacity
                 key={index}
-                style={styles.categoryButton}
-                onPress={() => handleSelect(category)}
+                style={[styles.card ]}
+                onPress={() => handleSelect(item)}
               >
                 <FontAwesome5
-                  name={category.icon}
-                  size={20}
-                  color="#2196F3"
-                  style={{ marginRight: 10 }}
+                  name={item.icon}
+                  size={22}
+                  color={themecolor}
                 />
-                <Text style={styles.categoryText}>{category.name}</Text>
+                <Text style={styles.cardText}>{item.name}</Text>
               </TouchableOpacity>
             ))}
+          </View>
 
-            <TouchableOpacity 
-              style={styles.closeButton} 
-              onPress={() => SetVisible(false)}
-            >
-              <Text style={styles.closeText}>Cancel</Text>
+           <View style={styles.addRow}>
+            <TextInput
+              placeholder="Add category"
+              value={newCategory}
+              onChangeText={setNewCategory}
+              style={styles.input}
+            />
+            <TouchableOpacity style={[styles.addBtn ,{backgroundColor:themecolor}]} onPress={addCategory}>
+              <FontAwesome5 name="plus" color="#fff" size={16} />
             </TouchableOpacity>
           </View>
-        </View>
-      </Modal>
-    </View>
+
+          <TouchableOpacity
+            style={styles.cancel}
+            onPress={() => SetVisible(false)}
+          >
+            <Text style={styles.cancelText}>Cancel</Text>
+          </TouchableOpacity>
+        </BlurView>
+      </View>
+    </Modal>
   );
 };
-
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  buttonText: { color: "#fff", fontSize: 16 },
   modalBackground: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
@@ -70,25 +90,64 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContainer: {
-    width: "80%",
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    width: "88%",
+    borderRadius: 20,
     padding: 20,
-    alignItems: "center",
   },
-  modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 15 },
-  categoryButton: {
+  title: {
+    fontSize: 18,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 15,
+  },
+  grid: {
     flexDirection: "row",
-    width: "100%",
-    padding: 12,
-    backgroundColor: "#f1f1f1",
-    borderRadius: 8,
-    marginVertical: 5,
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  card: {
+    width: "48%",
+    height: 70,
+    borderRadius: 16,
+    marginBottom: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+  },
+  cardText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color:"white"
+  },
+  addRow: {
+    flexDirection: "row",
+    marginTop: 10,
+    gap: 10,
+  },
+  input: {
+    flex: 1,
+    height: 45,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    paddingHorizontal: 12,
+  },
+  addBtn: {
+    width: 45,
+    height: 45,
+    borderRadius: 12,
+    backgroundColor: "#4F46E5",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cancel: {
+    marginTop: 15,
     alignItems: "center",
   },
-  categoryText: { fontSize: 16 },
-  closeButton: { marginTop: 15, padding: 10 },
-  closeText: { color: "red", fontSize: 16 },
+  cancelText: {
+    color: "red",
+    fontWeight: "600",
+  },
 });
 
 export default React.memo(SetCategorie);

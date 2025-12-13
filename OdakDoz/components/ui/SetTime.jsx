@@ -1,9 +1,8 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-const SetTime = ({settime ,SetIsVisible ,IsVisible}) => {
-  const [isSetTime, SetIsSetTime] = useState(false);
+const SetTime = ({settime ,SetIsVisible ,IsVisible ,themecolor ,setitThetime ,isSetTime}) => {
   const [time, setTime] = useState(0)
 
   const increment = () => setTime(prev => prev + 5);
@@ -11,8 +10,8 @@ const SetTime = ({settime ,SetIsVisible ,IsVisible}) => {
 
   const confirmTime = () => {
     settime(time);
-    SetIsSetTime(false);
-  }
+    setitThetime(false);
+    }
 
 
   const HandelThecatagory=()=>{
@@ -50,7 +49,7 @@ const SetTime = ({settime ,SetIsVisible ,IsVisible}) => {
               </TouchableOpacity>
             </View>
                <TouchableOpacity
-        style={styles.confirmButton}
+        style={[styles.confirmButton ,{backgroundColor:themecolor}]}
         onPress={() => confirmTime()}
       >
                 <Text style={styles.text}>Confirm</Text>
@@ -66,8 +65,7 @@ const SetTime = ({settime ,SetIsVisible ,IsVisible}) => {
         style={styles.button}
         onPress={() => HandelThecatagory()}
       >
-        <FontAwesome5 name="hourglass" size={26} />
-        <Text style={styles.text}>Set Time</Text>
+        <FontAwesome5 name="th-large" size={40} color={'white'} />
       </TouchableOpacity>
     </View>
   );
@@ -83,11 +81,10 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
-    borderRadius: 8,
+     borderRadius: 8,
     position: "absolute",
-    right: 60,
-    backgroundColor: "gray",
+    right: -140,
+    
   },
   text: {
     marginLeft: 8,
@@ -99,6 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 59,
   },
   settime: {
     backgroundColor: "white",
@@ -136,7 +134,6 @@ const styles = StyleSheet.create({
 
   confirmButton:{
 
-    backgroundColor:"gray",
     flexDirection:"row",
     justifyContent:"space-evenly",
     alignItems:"center",
