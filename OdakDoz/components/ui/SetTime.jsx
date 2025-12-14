@@ -1,18 +1,37 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Modal, StyleSheet, Alert,Text, TextInput, TouchableOpacity, View } from "react-native";
 
-const SetTime = ({settime ,SetIsVisible ,IsVisible ,themecolor ,setitThetime ,isSetTime}) => {
+const SetTime = ({settime ,SetIsVisible ,IsVisible ,themecolor ,setitThetime ,isSetTime ,cat_id}) => {
   const [time, setTime] = useState(0)
 
   const increment = () => setTime(prev => prev + 5);
   const decrement = () => setTime(prev => (prev > 0 ? prev - 5 : 0));
 
-  const confirmTime = () => {
-    settime(time);
+  
+
+
+  const HandleTimer=async()=>{
+     settime(time);
     setitThetime(false);
+
+    const response=await(fetch('http://10.0.2.2:8000/TimerView',{
+
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'},
+
+        body:JSON.stringify({time:time ,catagorie:cat_id})
+    }))
+
+    if (response.ok){
+      Alert.alert('Success','Time set successfully')
     }
 
+    else {
+      Alert.alert('Failed to set time')
+    }
+  }
 
   const HandelThecatagory=()=>{
    
@@ -50,7 +69,7 @@ const SetTime = ({settime ,SetIsVisible ,IsVisible ,themecolor ,setitThetime ,is
             </View>
                <TouchableOpacity
         style={[styles.confirmButton ,{backgroundColor:themecolor}]}
-        onPress={() => confirmTime()}
+        onPress={() => HandleTimer()}
       >
                 <Text style={styles.text}>Confirm</Text>
 

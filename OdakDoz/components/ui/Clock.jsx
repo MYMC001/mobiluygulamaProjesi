@@ -8,7 +8,8 @@ import SetCategorie from "./SetGatagorie";
 const AnimatedCircularProgress = Progress.AnimatedCircularProgress;
 
 
-const Clock = ({themecolor}) => {
+
+const Clock = ({themecolor }) => {
 
 
   const [isRunning ,SetRuning]=useState(false)
@@ -16,6 +17,17 @@ const Clock = ({themecolor}) => {
   const [seconds ,setSeconds ]=useState(0)
   const [IsVisible ,SetIsVisible]=useState(false)
   const [isSettime ,SetIsSettime]=useState(false)
+  const [ActiveCatagorie ,SetActiveCatagorie]=useState(true)
+  const [cat_id ,SetCatid]=useState(0)
+
+  const [catagorie ,SetCatagories]=useState()
+
+
+
+  const ActivateCatagorie=async()=>{
+
+    const response=await(fetch(''));
+  }
 
 
   useEffect(()=>{
@@ -36,11 +48,29 @@ const Clock = ({themecolor}) => {
   },[isRunning])
   return (
     <BlurView style={styles.main}>
+
+<TouchableOpacity
+  style={[
+    styles.categoryContainer,
+  ]}
+>
+  <View  style={[styles.is_active ,    { backgroundColor: ActiveCatagorie ? 'green' : 'red',borderRadius:10 },
+]}/>
+  <Text 
+    style={[
+      styles.categoryText,
+    ]}
+  >
+    {catagorie}
+  </Text>
+</TouchableOpacity>
       <SetCategorie 
       SetVisible={SetIsVisible} 
       isVisible={IsVisible} 
       SetIsSettime={SetIsSettime}
       themecolor={themecolor}
+      setCatagorie={SetCatagories}
+      SetCatid={SetCatid}
       
       />
       
@@ -50,7 +80,10 @@ settime={setSeconds}
  IsVisible={IsVisible}
   SetIsVisible={SetIsVisible}  
   themecolor={themecolor} 
-  isSetTime={isSettime}/>
+  isSetTime={isSettime}
+  cat_id={cat_id}
+  
+  />
      
        <View style={styles.clock}> 
                  <AnimatedCircularProgress
@@ -170,6 +203,38 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 8,
   },
+   categoryContainer: {
+    backgroundColor: "#f2f2f2",
+    position: "absolute",
+    width: 50,
+    height: 40,
+    left: 20,
+    top: 15,
+    borderRadius: 7,
+    alignItems: "center",
+    justifyContent: "center",
+    
+  },
+  activeCategory: {
+    backgroundColor: "#4f46e5", 
+  },
+  categoryText: {
+    fontSize: 14,
+    color: "#555",
+  },
+  activeCategoryText: {
+    color: "#fff",
+    fontWeight: "600",
+  },
+
+  is_active:{
+    width:10,
+    height:10,
+    borderRadius:5,
+    position:"absolute",  
+    top:2,
+    right:0,
+  }
 });
 
 

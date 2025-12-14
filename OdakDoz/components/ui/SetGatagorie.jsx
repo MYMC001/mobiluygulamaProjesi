@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  Alert,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
@@ -17,25 +18,94 @@ const defaultCategories = [
   { name: "Sport", icon: "running" },
 ];
 
-const SetCategorie = ({ SetVisible, isVisible, SetIsSettime  ,themecolor}) => {
+const SetCategorie = ({ SetVisible, isVisible, SetIsSettime  ,themecolor ,setCatagorie ,SetCatid}) => {
   const [categories, setCategories] = useState(defaultCategories);
   const [newCategory, setNewCategory] = useState("");
+  const [data ,SetDatat]=useState([]);
 
-  const handleSelect = (category) => {
+
+  const HandelTheCatagorie=async()=>{
+
+
+    const response=await(fetch('http://10.0.2.2:8000/CatagorieView',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        name:newCategory
+      })
+    }))
+
+    const data=await response.json()
+    if (response.ok){
+      Alert.alert('Success','Category added successfully')
+
+    }
+    else {
+      Alert.alert(data.error+'Failed to add category')
+    }
+  }
+
+  const handleSelect = (category ,name ,id) => {
     SetVisible(false);
     SetIsSettime(true);
+    ActiveCatagorie(category);
+    setCatagorie(name);
+    SetCatid(id);
   };
 
-  const addCategory = () => {
-    if (!newCategory.trim()) return;
 
-    setCategories((prev) => [
-      ...prev,
-      { name: newCategory, icon: "star" },
-    ]);
 
-    setNewCategory("");
-  };
+
+
+const GetCatagories=async()=>{
+
+  const response=await(fetch('http://10.0.2.2:8000/CatagorieView',{
+    method:'GET',
+    headers:{
+      'Content-Type':'application/json'
+    },
+
+  }))
+
+ if (response.ok){
+    const data=await response.json()
+    SetDatat(data)
+ }
+
+ else Alert.alert(data.error+'Failed to fetch categories')
+
+}
+
+
+
+const ActiveCatagorie=async(id)=>{
+  const response=await(fetch('http://10.0.2.2:8000/ActiveCategorie/'+id,{
+
+    method:'GET',
+    headers:{
+      'Content-Type':'application/json'
+    },
+ 
+  }))
+
+
+  if (response.ok){
+    Alert.alert('Category activated successfully');
+  }
+
+
+  else {
+    Alert.alert('Failed to activate category');
+  }
+}
+
+useEffect(()=>{
+  GetCatagories()
+},[data])
+
+  
 
   return (
     <Modal animationType="slide" transparent visible={isVisible}>
@@ -43,14 +113,14 @@ const SetCategorie = ({ SetVisible, isVisible, SetIsSettime  ,themecolor}) => {
         <BlurView style={styles.modalContainer}>
 
           <View style={styles.grid}>
-            {categories.map((item, index) => (
+            {data.map((item, index) => (
               <TouchableOpacity
                 key={index}
                 style={[styles.card ]}
-                onPress={() => handleSelect(item)}
+                onPress={() => handleSelect(item.id ,item.name ,item.id)}
               >
                 <FontAwesome5
-                  name={item.icon}
+                  name={'code'}
                   size={22}
                   color={themecolor}
                 />
@@ -66,7 +136,7 @@ const SetCategorie = ({ SetVisible, isVisible, SetIsSettime  ,themecolor}) => {
               onChangeText={setNewCategory}
               style={styles.input}
             />
-            <TouchableOpacity style={[styles.addBtn ,{backgroundColor:themecolor}]} onPress={addCategory}>
+            <TouchableOpacity style={[styles.addBtn ,{backgroundColor:themecolor}]} onPress={HandelTheCatagorie}>
               <FontAwesome5 name="plus" color="#fff" size={16} />
             </TouchableOpacity>
           </View>
