@@ -15,7 +15,7 @@ const SignUp = () => {
   const handleSignUp=async()=>{
 
 
-    const response=await  fetch('http://192.168.1.57:8000/SingUp',{
+    const response=await  fetch('http://10.0.2.2:8000/SingUp',{
 
       method:"POST",
       headers:{
@@ -122,7 +122,8 @@ const styles = StyleSheet.create({
   btn: {
      height: 40,
     borderRadius: 20,
-    justifyContent: "center"
+    justifyContent: "center",
+    backgroundColor: "#FF1616",
   },
 
   bt_info: {

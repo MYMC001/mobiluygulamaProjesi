@@ -18,6 +18,7 @@ const defaultCategories = [
   { name: "Sport", icon: "running" },
 ];
 
+
 const SetCategorie = ({ SetVisible, isVisible, SetIsSettime  ,themecolor ,setCatagorie ,SetCatid}) => {
   const [categories, setCategories] = useState(defaultCategories);
   const [newCategory, setNewCategory] = useState("");
@@ -103,7 +104,7 @@ const ActiveCatagorie=async(id)=>{
 
 useEffect(()=>{
   GetCatagories()
-},[data])
+},[])
 
   
 
@@ -117,10 +118,10 @@ useEffect(()=>{
               <TouchableOpacity
                 key={index}
                 style={[styles.card ]}
-                onPress={() => handleSelect(item.id ,item.name ,item.id)}
+                onPress={() => handleSelect(item.id ,item.icon ,item.id)}
               >
                 <FontAwesome5
-                  name={'code'}
+                  name={item.icon}
                   size={22}
                   color={themecolor}
                 />
@@ -141,12 +142,7 @@ useEffect(()=>{
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            style={styles.cancel}
-            onPress={() => SetVisible(false)}
-          >
-            <Text style={styles.cancelText}>Cancel</Text>
-          </TouchableOpacity>
+         
         </BlurView>
       </View>
     </Modal>
@@ -163,6 +159,7 @@ const styles = StyleSheet.create({
     width: "88%",
     borderRadius: 20,
     padding: 20,
+    backgroundColor:"white"
   },
   title: {
     fontSize: 18,
@@ -187,7 +184,7 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 14,
     fontWeight: "600",
-    color:"white"
+    color:"black"
   },
   addRow: {
     flexDirection: "row",

@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  TouchableOpacity
 } from "react-native";
 import {
   PieChart,
@@ -11,20 +12,51 @@ import {
   Grid,
 } from "react-native-svg-charts";
 
- 
-const data = [
-  { key: 1, label: "Coding", value: 80, color: "#3B82F6" },
-  { key: 2, label: "Study", value: 40, color: "#10B981" },
-  { key: 3, label: "Reading", value: 30, color: "#F59E0B" },
-  { key: 4, label: "Sport", value: 20, color: "#EF4444" },
-];
+import Header from "@/components/ui/Header";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BlurView } from "expo-blur";
+import { FontAwesome5 } from "@expo/vector-icons";
 
-const weeklyData = [2, 3, 4, 1, 5, 2, 4];  
+
+ 
+
+
+const weeklyData = [2, 3, 100, 1, 5, 2, 4];  
+
+
 
 
 const Dashboard = () => {
 
   const [data,SetDatat]=React.useState([])
+  const [LastSevenDaysData,SetLastSevenDays]=React.useState([])
+
+
+
+  const  get_last_seven_days =async (name) => {
+
+
+  const response=await(fetch('http://10.0.2.2:8000/last_7_days_timers/'+name,{
+    method:'GET',
+    headers:{
+      'Content-Type':'application/json'
+    },
+  }))
+  
+
+  if (response.ok){
+    const data=await response.json()
+    SetLastSevenDays(data.last_7_days )
+}
+
+  else {
+    Alert.alert('Failed to fetch last seven days data')
+  }
+  
+    
+
+}
+
 
 const GetCatagories=async()=>{
 
@@ -46,17 +78,15 @@ const GetCatagories=async()=>{
 }
 useEffect(()=>{
   GetCatagories()
+
+  
 },[])
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* HEADER */}
-      <Text style={styles.title}>Dashboard</Text>
-      <Text style={styles.subtitle}>Today overview</Text>
-
-      {/* PIE CHART */}
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Focus by Category</Text>
-
+    <SafeAreaView style={styles.container} >
+      <Header/>
+     
+       <BlurView style={styles.card}>
+ 
         <PieChart
           style={{ height: 180 }}
           data={data.map(item => ({
@@ -68,8 +98,7 @@ useEffect(()=>{
           outerRadius={80}
         />
 
-        {/* LEGEND */}
-        {data.map(item => (
+         {data.map(item => (
           <View key={item.key} style={styles.legendRow}>
             <View
               style={[
@@ -82,43 +111,78 @@ useEffect(()=>{
             </Text>
           </View>
         ))}
-      </View>
+      </BlurView>
 
-      {/* BAR GRAPH */}
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Weekly Focus (hours)</Text>
+       <View style={styles.card}>
 
-        <BarChart
-          style={{ height: 180 }}
-          data={weeklyData}
-          svg={{ fill: "#1877F2" }}
-          contentInset={{ top: 20, bottom: 20 }}
-          spacingInner={0.4}
-        >
-          <Grid />
-        </BarChart>
+        <View   style={styles.Catagories}>
 
-        <View style={styles.daysRow}>
-          {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
-            <Text key={index} style={styles.dayText}>
-              {day}
-            </Text>
-          ))}
+
+          
+                    <TouchableOpacity  style={[styles.CatagoryCard ]} 
+                    
+                    
+                      onPress={()=>get_last_seven_days('Project')}
+                    >   
+            
+            <FontAwesome5 name="project-diagram" size={20} color={'#8B5CF6'} />         
+          </TouchableOpacity>
+          <TouchableOpacity  style={[styles.CatagoryCard ]} 
+          
+            onPress={()=>get_last_seven_days('Coding')}
+          >   
+            <FontAwesome5 name="code" size={20} color={'#3B82F6'} />         
+          </TouchableOpacity>
+                    <TouchableOpacity  style={[styles.CatagoryCard ]} 
+                    
+                      onPress={()=>get_last_seven_days('Study')}
+                    >   
+        
+            <FontAwesome5 name="book" size={20} color={'#F59E0B'} />         
+          </TouchableOpacity>
+                    <TouchableOpacity  style={[styles.CatagoryCard ]}
+                    
+                    
+                      onPress={()=>get_last_seven_days('Reading')}
+                    >   
+         
+            <FontAwesome5 name="book-open" size={20} color={'#10B981'} />         
+          </TouchableOpacity>
         </View>
+
+       <BarChart
+  style={{ height: 180 }}
+  data={LastSevenDaysData.map(item => item.total_minutes)}
+  svg={{ fill: "#10B981" }}
+  contentInset={{ top: 20, bottom: 20 }}
+  spacingInner={0.4}
+>
+  <Grid direction={Grid.Direction.VERTICAL} />
+</BarChart>
+
+       <View style={styles.daysRow}>
+  {LastSevenDaysData.map((ct, index) => (
+    <Text key={index} style={styles.dayText}>
+        {ct.total_minutes}
+    </Text>
+  ))}
+</View>
+
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
  
-/* ------------------ STYLES ------------------ */
-
+ 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "#F9FAFB",
-  },
+  container:{
+      flex:1,
+       alignItems:"center",
+       justifyContent: "space-around",
+       gap:10,
+       backgroundColor:"#1c51baff"
+   },
 
   title: {
     fontSize: 22,
@@ -133,8 +197,8 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: "#fff",
-    borderRadius: 14,
+    width: "88%",
+     borderRadius: 14,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
@@ -145,7 +209,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
     marginBottom: 12,
-    color: "#111827",
+    color: "white",
   },
 
   legendRow: {
@@ -163,7 +227,7 @@ const styles = StyleSheet.create({
 
   legendText: {
     fontSize: 13,
-    color: "#374151",
+    color: "white",
   },
 
   daysRow: {
@@ -175,8 +239,26 @@ const styles = StyleSheet.create({
 
   dayText: {
     fontSize: 12,
-    color: "#6B7280",
+    color: "white",
   },
+
+  Catagories:{
+    width:"100%",
+    height:50,
+    flexDirection:"row",
+    justifyContent:"space-around",
+    alignItems:"center",
+    marginBottom:10,
+  }
+  ,
+  CatagoryCard:{
+    width:60,
+    height:40,
+    borderRadius:10,
+    backgroundColor:"#E5E7EB",
+    justifyContent:"center",
+    alignItems:"center",
+  }
 });
 
 

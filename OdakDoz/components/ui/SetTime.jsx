@@ -2,26 +2,24 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { FlatList, Modal, StyleSheet, Alert,Text, TextInput, TouchableOpacity, View } from "react-native";
 
-const SetTime = ({settime ,SetIsVisible ,IsVisible ,themecolor ,setitThetime ,isSetTime ,cat_id}) => {
-  const [time, setTime] = useState(0)
-
-  const increment = () => setTime(prev => prev + 5);
-  const decrement = () => setTime(prev => (prev > 0 ? prev - 5 : 0));
+const SetTime = ({SetIsVisible ,IsVisible ,themecolor ,setitThetime ,isSetTime ,cat_id ,setMinute ,minutes}) => {
+ 
+  const increment = () => setMinute(prev => prev + 5);
+  const decrement = () => setMinute(prev => (prev > 0 ? prev - 5 : 0));
 
   
 
 
   const HandleTimer=async()=>{
-     settime(time);
-    setitThetime(false);
-
+     setitThetime(false);
+    setMinute(minutes);
     const response=await(fetch('http://10.0.2.2:8000/TimerView',{
 
       method:'POST',
       headers:{
         'Content-Type':'application/json'},
 
-        body:JSON.stringify({time:time ,catagorie:cat_id})
+        body:JSON.stringify({duration:minutes ,catagorie:cat_id})
     }))
 
     if (response.ok){
@@ -57,8 +55,8 @@ const SetTime = ({settime ,SetIsVisible ,IsVisible ,themecolor ,setitThetime ,is
               </TouchableOpacity>
 
               <TextInput
-                value={time.toString()}
-                onChangeText={text => setTime(Number(text) || 0)}
+                value={minutes.toString()}
+                onChangeText={text => setMinute(Number(text) || 0)}
                 style={styles.settimeinput}
                 keyboardType="numeric"
               />

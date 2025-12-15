@@ -1,145 +1,158 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import * as Progress from 'react-native-circular-progress';
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View ,AppState } from "react-native";
+import * as Progress from "react-native-circular-progress";
+
 import SetTime from "./SetTime";
 import SetCategorie from "./SetGatagorie";
+
 const AnimatedCircularProgress = Progress.AnimatedCircularProgress;
 
+const Clock = ({ themecolor }) => {
 
+  const [isRunning, SetRuning] = useState(false);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
 
-const Clock = ({themecolor }) => {
+  const appState = useRef(AppState.currentState);
 
+  useEffect(() => {
+  const sub = AppState.addEventListener("change", nextState => {
+    appState.current = nextState;
+  });
 
-  const [isRunning ,SetRuning]=useState(false)
- 
-  const [seconds ,setSeconds ]=useState(0)
-  const [IsVisible ,SetIsVisible]=useState(false)
-  const [isSettime ,SetIsSettime]=useState(false)
-  const [ActiveCatagorie ,SetActiveCatagorie]=useState(true)
-  const [cat_id ,SetCatid]=useState(0)
+  return () => sub.remove();
+}, []);
 
-  const [catagorie ,SetCatagories]=useState()
+  const [IsVisible, SetIsVisible] = useState(false);
+  const [isSettime, SetIsSettime] = useState(false);
+  const [ActiveCatagorie, SetActiveCatagorie] = useState(true);
+  const [cat_id, SetCatid] = useState(0);
+  const [catagorie, SetCatagories] = useState();
 
+   const startTimeRef = useRef(null);
+  const totalSecondsRef = useRef(0);
 
+   const startTimer = () => {
+    if (minutes === 0 && seconds === 0) return;
 
-  const ActivateCatagorie=async()=>{
+    totalSecondsRef.current = minutes * 60 + seconds;
+    startTimeRef.current = Date.now();
+    SetRuning(true);
+  };
 
-    const response=await(fetch(''));
-  }
+   const pauseTimer = () => {
+    if (!isRunning  ) return;
 
+    const elapsed =
+      Math.floor((Date.now() - startTimeRef.current) / 1000);
 
-  useEffect(()=>{
+    const remaining = totalSecondsRef.current - elapsed;
 
-    const interval=setInterval(() => {
+    totalSecondsRef.current = Math.max(remaining, 0);
+    startTimeRef.current = null;
 
-      if (!isRunning) return;
+    setMinutes(Math.floor(totalSecondsRef.current / 60));
+    setSeconds(totalSecondsRef.current % 60);
 
-       setSeconds(prev=>{
-               if(prev==0 )  return 0;
+    SetRuning(false);
+  };
 
-               else  return prev-1;
-       })
-      
-    }, 100);
+   useEffect(() => {
+    if (!isRunning ) return;
 
-    return ()=>clearInterval(interval)
-  },[isRunning])
+    const interval = setInterval(() => {
+      const elapsed =
+        Math.floor((Date.now() - startTimeRef.current) / 1000);
+
+      const remaining = totalSecondsRef.current - elapsed;
+
+      if (remaining <= 0) {
+        setMinutes(0);
+        setSeconds(0);
+        SetRuning(false);
+        clearInterval(interval);
+        return;
+      }
+
+      setMinutes(Math.floor(remaining / 60));
+      setSeconds(remaining % 60);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
   return (
     <BlurView style={styles.main}>
 
-<TouchableOpacity
-  style={[
-    styles.categoryContainer,
-  ]}
->
-  <View  style={[styles.is_active ,    { backgroundColor: ActiveCatagorie ? 'green' : 'red',borderRadius:10 },
-]}/>
-  <Text 
-    style={[
-      styles.categoryText,
-    ]}
-  >
-    {catagorie}
-  </Text>
-</TouchableOpacity>
-      <SetCategorie 
-      SetVisible={SetIsVisible} 
-      isVisible={IsVisible} 
-      SetIsSettime={SetIsSettime}
-      themecolor={themecolor}
-      setCatagorie={SetCatagories}
-      SetCatid={SetCatid}
-      
+      {/* CATEGORY ICON */}
+      <TouchableOpacity style={styles.categoryContainer}>
+        <View
+          style={[
+            styles.is_active,
+            { backgroundColor: ActiveCatagorie ? "green" : "red" }
+          ]}
+        />
+        <FontAwesome5
+          name={catagorie ? catagorie : "question"}
+          size={20}
+          color={themecolor}
+        />
+      </TouchableOpacity>
+
+      <SetCategorie
+        SetVisible={SetIsVisible}
+        isVisible={IsVisible}
+        SetIsSettime={SetIsSettime}
+        themecolor={themecolor}
+        setCatagorie={SetCatagories}
+        SetCatid={SetCatid}
       />
-      
-<SetTime 
-settime={setSeconds}
- setitThetime={SetIsSettime} 
- IsVisible={IsVisible}
-  SetIsVisible={SetIsVisible}  
-  themecolor={themecolor} 
-  isSetTime={isSettime}
-  cat_id={cat_id}
-  
-  />
-     
-       <View style={styles.clock}> 
-                 <AnimatedCircularProgress
-                 
+
+      <SetTime
+        setitThetime={SetIsSettime}
+        IsVisible={IsVisible}
+        SetIsVisible={SetIsVisible}
+        themecolor={themecolor}
+        isSetTime={isSettime}
+        cat_id={cat_id}
+        setMinute={setMinutes}
+        minutes={minutes}
+      />
+
+      {/* CLOCK */}
+      <View style={styles.clock}>
+        <AnimatedCircularProgress
           size={182}
           width={15}
-          fill={seconds}                 
-          tintColor={themecolor}      
-          backgroundColor={'white'}
-        >
-          
-        </AnimatedCircularProgress>
-        
-        <View  style={styles.timerNum}>
-                  <Text   style={styles.time}>{seconds}</Text>
-                  <Text   style={styles.time}>:</Text>
-                  <Text   style={styles.time}>{seconds}</Text>
-                  
-
+          fill={(seconds / 60) * 100}
+          tintColor={themecolor}
+          backgroundColor={"white"}
+        />
+        <View style={styles.timerNum}>
+          <Text style={styles.time}>
+            {String(minutes).padStart(2, "0")}
+          </Text>
+          <Text style={styles.time}>:</Text>
+          <Text style={styles.time}>
+            {String(seconds).padStart(2, "0")}
+          </Text>
         </View>
-
       </View>
 
- 
- 
- 
+      {/* CONTROLS */}
+      <View style={styles.btns}>
+        <TouchableOpacity style={styles.btn} onPress={startTimer}>
+          <FontAwesome5 name="play" size={50} color="#fff" />
+        </TouchableOpacity>
 
-<View style={styles.btns}>
-    <TouchableOpacity
-  
-  onPress={() => SetRuning(prev => !prev)}
+        <TouchableOpacity style={styles.btn} onPress={pauseTimer}>
+          <FontAwesome5 name="pause" size={50} color="#fff" />
+        </TouchableOpacity>
+      </View>
 
-  style={styles.btn}
->
-  <FontAwesome5
-    name={'play'}
-    size={50}
-    color="#fff"
-  />
-</TouchableOpacity>
-    <TouchableOpacity
-  style={styles.btn}
-  
-  onPress={() => SetRuning(prev => !prev)}
->
-  <FontAwesome5
-    name={'pause'}
-    size={50}
-    color="#fff"
-  />
-</TouchableOpacity>
-</View>
-       
-
-  
-     </BlurView>
+    </BlurView>
   );
 };
 
@@ -152,90 +165,56 @@ const styles = StyleSheet.create({
     padding: 20,
     overflow: "hidden",
   },
-
   clock: {
-    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
   },
-
   timerNum: {
-    width: 120,
-    height: 50,
     position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
     flexDirection: "row",
-    marginTop: 10,
-    paddingHorizontal: 10,
-    borderRadius: 12,
     backgroundColor: "rgba(0,0,0,0.35)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.2)",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
   },
-
   time: {
     fontSize: 30,
     color: "#fff",
     fontWeight: "700",
-    letterSpacing: 1,
   },
-
   btns: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "55%",
     marginTop: 35,
   },
-
   btn: {
     width: 65,
     height: 65,
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
-
     backgroundColor: "rgba(0,0,0,0.4)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.15)",
-
-    shadowColor: "#000",
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
   },
-   categoryContainer: {
-    backgroundColor: "#f2f2f2",
+  categoryContainer: {
     position: "absolute",
-    width: 50,
-    height: 40,
     left: 20,
     top: 15,
+    width: 50,
+    height: 40,
     borderRadius: 7,
     alignItems: "center",
     justifyContent: "center",
-    
+    backgroundColor: "#f2f2f2",
   },
-  activeCategory: {
-    backgroundColor: "#4f46e5", 
+  is_active: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    position: "absolute",
+    top: 2,
+    right: 2,
   },
-  categoryText: {
-    fontSize: 14,
-    color: "#555",
-  },
-  activeCategoryText: {
-    color: "#fff",
-    fontWeight: "600",
-  },
-
-  is_active:{
-    width:10,
-    height:10,
-    borderRadius:5,
-    position:"absolute",  
-    top:2,
-    right:0,
-  }
 });
-
 
 export default React.memo(Clock);

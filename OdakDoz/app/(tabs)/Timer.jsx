@@ -10,6 +10,8 @@ import  Header  from '@/components/ui/Header';
 export default function Timer() {
 const [themecolor ,setThemeColor]=useState('gray')
 const [minute ,setMinute]=useState(0)
+
+
   
   return (
     <SafeAreaView style={[styles.container ,{backgroundColor:themecolor}]}>
